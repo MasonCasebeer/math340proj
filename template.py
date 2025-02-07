@@ -93,6 +93,7 @@ def print_rogues(output_filename, rogue_couples):
         of.write(str(set(rogue_couple))+"\t")
     of.close()
 
+
 #This function should test Hall's conditions on a graph defined in a priorities CSV file.  It
 #will ensure that all members of the men set can be paired to a woman from the women set.  It
 #makes no guarantees that all women can be paired to a man.  I wrote it to return "pass" or
@@ -129,8 +130,19 @@ def test_halls(priorities_filename,man_set_label,woman_set_label):
 #return a set of sets.  Each inner set represents a rogue pairing.  A stable pairing should
 #return an empty set.
 def find_rogues(pairs_filename, priorities_filename):
+    priorities = read_priorities(priorities_filename) 
+    males = priorities['B']
+    pairs = read_pairs(pairs_filename)
+    for male in males:
+        matches = males[male]
+        print(males[male])
+        print(pairs)
+
     #TODO: identify rogue pairings
-    return 0
+    return {}
+#calling priorities['B']['B3'][1] would return 'R2' indicating that R2
+#is B3's second choice mate.
+
 
 #This is where you need to implement the Gale-Shapley algorithm on a set of priorities defined
 #in a CSV file located by the csv_path parameter.  man_set_label and woman_set_label are strings
@@ -179,8 +191,8 @@ def main():
             write_pairs(T3_SOLN_PATH+"size_"+str(size)+"_R-B_soln.csv",pairs)
         return 0
     
-    task_1()#test Hall's Condition for each
-    #task_2()#find rogue pairs for each proposed
+    #task_1()#test Hall's Condition for each
+    task_2()#find rogue pairs for each proposed
     #task_3()#generate the blue and red optimal solutions for each
 
     return 0
@@ -192,6 +204,7 @@ def main():
 
 def test():
     test_halls = False
+    test_rouge = True
     if(test_halls):
         of=open(T1_SOLN_PATH+"results.txt","w")
         halls_result = test_halls(".\\data\\example\\T1\\data\\size6-1.csv",'B','R')
@@ -201,11 +214,20 @@ def test():
         halls_result = test_halls(".\\data\\example\\T1\\data\\size6-1.csv",'B','R')
         halls_result = test_halls(".\\data\\example\\T1\\data\\size10-2.csv",'B','R')
         halls_result = test_halls(".\\data\\example\\T1\\data\\size20-3.txt",'B','R')
-
+    if(test_rouge):
+        #for size in (6,10):
+        #    for pairing in(1,2):
+        #        rogues=find_rogues(T2_DATA_PATH+"size_"+str(size)+"_pairings_"+str(pairing)+".csv", T2_DATA_PATH+"size_"+str(size)+"_priorities.csv")
+        #        print_rogues(T2_SOLN_PATH+"size_"+str(size)+"_rogues_"+str(pairing)+".txt", rogues)
+        pairing = 2
+        size = 6
+        rogues=find_rogues(T2_DATA_PATH+"size_"+str(size)+"_pairings_"+str(pairing)+".csv", T2_DATA_PATH+"size_"+str(size)+"_priorities.csv")
+        print_rogues(T2_SOLN_PATH+"size_"+str(size)+"_rogues_"+str(pairing)+".txt", rogues)
+        print("Task 2 complete.")
 
 
     return 0
 
 #Here's where main() and/or test() gets executed when you run this script.
-main()
-#test()
+#main()
+test()
