@@ -130,16 +130,43 @@ def test_halls(priorities_filename,man_set_label,woman_set_label):
 #return a set of sets.  Each inner set represents a rogue pairing.  A stable pairing should
 #return an empty set.
 def find_rogues(pairs_filename, priorities_filename):
+    rouge_couples = set()
     priorities = read_priorities(priorities_filename) 
-    males = priorities['B']
     pairs = read_pairs(pairs_filename)
-    for male in males:
-        matches = males[male]
-        print(males[male])
-        print(pairs)
+    female_char = list(pairs.keys())[0][0]
+    male_char = list(pairs.values())[0][0]
+    females = priorities[female_char]
+    for female in females:
+        #we haevn't found pair yet
+        found_rouge = False
+        
+        #matches sorted by priority
+        matches = females[female]
+        cur_match = pairs[female]
+        for male in matches:
+            cur_female_pref = females[female].index(cur_match)
+            potential_female_pref = females[female].index(male)
+            
+            if(potential_female_pref < cur_female_pref):
+                male_matches = priorities[male_char][male]
+
+                #who is this male actually paired with
+                for find_female in pairs:
+                    if(pairs[find_female] == male):
+                        male_cur_match = find_female
+
+                cur_male_pref = male_matches.index(male_cur_match)
+                potential_male_pref = male_matches.index(female)
+
+                if(potential_male_pref < cur_male_pref):
+                    pairing = frozenset([male,female])
+                    #print("This pairing is more stable: " + str(pairing))
+                    rouge_couples.add(pairing)
+                    found_rouge = True
+
 
     #TODO: identify rogue pairings
-    return {}
+    return rouge_couples
 #calling priorities['B']['B3'][1] would return 'R2' indicating that R2
 #is B3's second choice mate.
 
@@ -219,8 +246,9 @@ def test():
         #    for pairing in(1,2):
         #        rogues=find_rogues(T2_DATA_PATH+"size_"+str(size)+"_pairings_"+str(pairing)+".csv", T2_DATA_PATH+"size_"+str(size)+"_priorities.csv")
         #        print_rogues(T2_SOLN_PATH+"size_"+str(size)+"_rogues_"+str(pairing)+".txt", rogues)
-        pairing = 2
-        size = 6
+        pairing = 1
+        size = 10
+        print(T2_DATA_PATH+"size_"+str(size)+"_pairings_"+str(pairing)+".csv")
         rogues=find_rogues(T2_DATA_PATH+"size_"+str(size)+"_pairings_"+str(pairing)+".csv", T2_DATA_PATH+"size_"+str(size)+"_priorities.csv")
         print_rogues(T2_SOLN_PATH+"size_"+str(size)+"_rogues_"+str(pairing)+".txt", rogues)
         print("Task 2 complete.")
@@ -229,5 +257,5 @@ def test():
     return 0
 
 #Here's where main() and/or test() gets executed when you run this script.
-#main()
-test()
+main()
+#test()
