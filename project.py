@@ -226,7 +226,7 @@ def main():
         for size in (6,10,20):
             for file in range(0,4):
                 of.write("size "+str(size)+" file "+str(file)+": ")
-                print(T1_DATA_PATH)
+                #print(T1_DATA_PATH)
                 halls_result=test_halls(T1_DATA_PATH+"size"+str(size)+"-"+str(file)+".csv",'B','R')
                 of.write(str(halls_result)+"\n")
         of.close()
@@ -250,10 +250,11 @@ def main():
             write_pairs(T3_SOLN_PATH+"size_"+str(size)+"_B-R_soln.csv",pairs)
             pairs=pair(priorities_filename,'R','B')
             write_pairs(T3_SOLN_PATH+"size_"+str(size)+"_R-B_soln.csv",pairs)
+        print("Task 3 coplete.")
         return 0
     
-    #task_1()#test Hall's Condition for each
-    #task_2()#find rogue pairs for each proposed
+    task_1()#test Hall's Condition for each
+    task_2()#find rogue pairs for each proposed
     task_3()#generate the blue and red optimal solutions for each
 
     return 0
